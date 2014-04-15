@@ -1,0 +1,47 @@
+-if @idea != nil
+	.info
+		-if @idea.creator.id == current_user.id
+			%span.fa.fa-edit.right{:data => {:toggle => 'modal', :target => '#updateModal'}}
+
+		%h1 
+			=@idea.title
+
+		.item
+			%span.fa.fa-user
+			%p 
+				Written By: 
+				%strong=@idea.creator.name
+
+		.item
+			%span.fa.fa-calendar-o
+			%p  
+				On
+				%strong=@idea.created_at.to_date
+
+		.item
+			%span.fa.fa-exclamation-circle
+			%p
+				=simple_format(@idea.content)
+
+		.gap-discussion
+			Discussion
+		.discussion
+			.hidden-scroll
+				-@idea.discussions.each do |msg|
+					.msg
+						.name=msg.user_name
+						.msg-body=msg.message
+				.form
+					= form_tag(send_message_idea_path(@idea), method: :post) do
+						= text_area_tag :message, nil
+						= submit_tag "Send", :class => 'button'
+		
+	-if @idea.creator.id == current_user.id
+		#updateModal.modal.fade{:tabindex=>"-1", :role=>"dialog"}
+			.modal-dialog
+				.modal-content
+					.modal-header
+						%span.right.fa.fa-times.fa-2x{:data => {:dismiss => "modal"}}
+						%h1 Update
+					.modal-body
+						= render :partial => 'form', :locals => {:@idea => @idea, :@t => @idea.type}

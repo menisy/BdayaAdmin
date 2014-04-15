@@ -8,6 +8,16 @@ BdayaAdmin::Application.routes.draw do
     end
   end
   
+  resources :feedbacks
+  get '/gowanyat' , to: "ideas#gowanyat"
+  get 'ideas/top' , to: "ideas#top"
+  get 'gowanyat/top' , to: "ideas#top_gowanyat"
+  resources :ideas do
+    member do
+      post :upvote
+      post :send_message
+    end
+  end
   resources :requests
   resources :events do
     member do
@@ -26,6 +36,9 @@ BdayaAdmin::Application.routes.draw do
     post :done
     post :reopen
     post :accept
+    member do
+      post :send_message
+    end
   end
 
   resources :notifications

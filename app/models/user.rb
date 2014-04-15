@@ -108,6 +108,12 @@ class User
   has_many :created_events, class_name: 'Event', inverse_of: :creator
   has_many :created_logs, class_name: 'EventLog', inverse_of: :creator
 
+
+  has_many :feedbacks
+
+  has_many :created_ideas, class_name: 'Idea', inverse_of: :creator
+  has_and_belongs_to_many :upvoted_ideas, class_name: 'Idea', inverse_of: :upvoters
+  
   # def get_pending_tasks
   #   tasks = self.tasks_responsible_for.where(:status=>"pending").to_a
   # end
@@ -315,6 +321,22 @@ class User
   def head?
     head_of_committee != nil
   end
+
+  def vice_head?
+    vice_of_committee != nil
+  end
+
+  def upper_board?
+    return upper_board == true
+  end
+
+  def president?
+    return president == true
+  end
+
+  def in_committee?(com_name)
+    return member_of_committee.name == com_name
+  end  
 
   def is_meeting_attendance(m,s)
     a = self.attendances.where(:meeting_id => m.id).first

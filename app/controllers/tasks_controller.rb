@@ -7,6 +7,7 @@ class TasksController < ApplicationController
 	def create
 		#@user = User.find(params[:task][:responsible_user_id])
 		@task = Task.new params[:task]
+		@task.status = "pending"
 		@task.creator = current_user
 		if @task.save
 			redirect_to sent_tasks_path
@@ -17,6 +18,16 @@ class TasksController < ApplicationController
     #@task.responsible_user = User.find(params[:task][:user_id])
     #@task.save
     #redirect_to sent_tasks_path
+	end
+
+	def update
+		@task = Task.find(params[:id])
+		@task.status = "pending"
+		if @task.update_attributes!(params[:task])
+			redirect_to sent_tasks_path
+		else
+			redirect_to :back, alert: @task.errors.full_messages.join("\n")
+		end
 	end
 
 	def show
@@ -70,4 +81,13 @@ class TasksController < ApplicationController
 		# @sent_tasks = current_user.get_sent_tasks
 		@task = Task.new
 	end
+
+	def send_message
+	    @task = Task.find(params[:id])
+	    @user = current_user.name
+	    @message = params[:message]
+	    @task.post_message(@user,@message)
+	    redirect_to tasks_path
+	end
+
 end

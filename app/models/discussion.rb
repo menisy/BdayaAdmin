@@ -8,5 +8,7 @@ class Discussion
   validates_presence_of :message, :message=> "Must enter a message"
 
   belongs_to :meeting, class_name: 'Meeting'
+  belongs_to :task
+  belongs_to :idea
   
 end

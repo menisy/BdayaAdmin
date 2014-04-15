@@ -8,17 +8,16 @@
 			.pp-bg
 			.pp
 				- if current_user 
-					%div{onclick: "showhide('update_image')"}
-						- unless current_user.try(:image).try(:url) == nil
-							= image_tag current_user.image.url
-						- else
-							= image_tag "logo.png", alt: 'logo'
+					- unless current_user.try(:image).try(:url) == nil
+						= image_tag current_user.image.url, id: 'change-pp'
+					- else
+						= image_tag "logo.png", alt: 'logo', id: 'change-pp'
 				- else
-					= image_tag "logo.png", alt: 'logo'
+					= image_tag "logo.png", alt: 'logo', id: 'change-pp'
 
 				- if current_user
 					%div{id:'update_image',style:'display:none;'}
-						= form_for(current_user, :url => update_image_user_path(current_user), :html => { :method => :post, :multipart => true }) do |f|
+						= form_for(current_user, :url => update_image_user_path(current_user), :html => { :method => :post, :multipart => true, id: "change-pp-form" }) do |f|
 							= f.file_field :image
 							= f.submit "Upload new Avatar"
 					%h1
@@ -49,17 +48,28 @@
 					%li
 						%span.fa.fa-users Meetings
 
-
-			%ul.menu
 				%a{href:'/events'}
 					%li
 						%span.fa.fa-bullhorn Events
 				
 				%a{href:'/requests'}
 					%li
-						%span.fa.fa-check-square-o Requests
+						%span.fa.fa-check-square-o Requests	
+				
+
+			%ul.menu
+				%a{href:'/ideas'}
+					%li
+						%span.fa.fa-key Ideas Bank
+				
+				%a{href:'/gowanyat'}
+					%li
+						%span.fa.fa-heart جوانيات			
 
 			%ul.menu
 				=link_to destroy_user_session_path, method: 'delete' do
 					%li.danger
 						%span.fa.fa-sign-out Logout
+				%a{href:'/feedbacks'}
+					%li
+						%span.fa.fa-bell Feedback
