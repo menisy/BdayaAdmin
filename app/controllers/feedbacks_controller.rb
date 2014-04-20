@@ -3,9 +3,9 @@ class FeedbacksController < ApplicationController
 	def index
 		
 		if(current_user.in_committee?("IT"))
-			@feedbacks = Feedback.all.to_a
+			@feedbacks = Feedback.all.desc(:created_at).to_a
 		else
-			@feedbacks = current_user.feedbacks.to_a
+			@feedbacks = current_user.feedbacks.desc(:created_at).to_a
 		end
 
 	end
@@ -24,6 +24,21 @@ class FeedbacksController < ApplicationController
 		else
 			redirect_to :back, alert: @feedback.errors.full_messages.join("\n")
 		end
+   	end
+
+   	def update
+   		@feedback = Feedback.find(params[:id])
+		if @feedback.update_attributes!(params[:feedback])
+			redirect_to feedbacks_path
+		else
+			redirect_to :back, alert: @feedback.errors.full_messages.join("\n")
+		end
+   	end
+
+   	def destroy
+   		@feedback = Feedback.find(params[:id])
+   		@feedback.destroy
+   		redirect_to feedbacks_path
    	end
 
 end
