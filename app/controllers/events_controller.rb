@@ -6,14 +6,14 @@ class EventsController < ApplicationController
                     :new_permissions, :profile_picture, :cover_picture,
                     :rate_image, :add_image]
 
-  authorize_actions_for :load_event, only: [
-    :new_materials,
-    :new_permissions,
-    :profile_picture,
-    :cover_picture,
-    :rate_image,
-    :add_image
-  ]
+  # authorize_actions_for :load_event, only: [
+  #   :new_materials,
+  #   :new_permissions,
+  #   :profile_picture,
+  #   :cover_picture,
+  #   :rate_image,
+  #   :add_image
+  # ]
 
 	def new
 		@event = Event.new
@@ -33,7 +33,7 @@ class EventsController < ApplicationController
 	end
 
 	def index
-		@events = Event.all.to_a
+		@events = current_user.get_my_events.to_a
 	end
 
   def show
@@ -120,9 +120,14 @@ class EventsController < ApplicationController
   def rate_image
     event = Event.find(params[:id])
     image = EventImage.find(params[:image_id])
-    image.raters = image.raters+1
-    image.rating = ((image.rating+(params[:rating].to_i))/image.raters).round(1)
-    image.save
+    if (!image.voters.include?(current_user))
+      image.raters = image.raters+1
+      image.voters << current_user
+      image.ratings << params[:rating].to_i
+      sum = image.ratings.inject(0) {|sum, i|  sum + i }
+      image.rating = sum / image.ratings.count
+      image.save
+    end
     redirect_to event, :notice => "Successfully Rated Image."
   end
 

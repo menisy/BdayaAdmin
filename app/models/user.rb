@@ -108,7 +108,7 @@ class User
   has_and_belongs_to_many :member_of_events, class_name: 'Event', inverse_of: :members
   has_many :created_events, class_name: 'Event', inverse_of: :creator
   has_many :created_logs, class_name: 'EventLog', inverse_of: :creator
-
+  has_and_belongs_to_many :voted_images, class_name: 'EventImage', inverse_of: :voters
 
   has_many :feedbacks
 
@@ -356,6 +356,16 @@ p
 
   def is_brens?
     president? || upper_board?
+  end
+
+  def get_my_events
+    events = []
+    Event.each do |e|
+      if(e.updatable_by?(self))
+        events << e
+      end
+    end
+    return events
   end
 
 end

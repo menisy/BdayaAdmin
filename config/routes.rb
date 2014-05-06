@@ -11,7 +11,12 @@ BdayaAdmin::Application.routes.draw do
     end
   end
   
-  resources :feedbacks
+  resources :feedbacks do
+    member do
+      post :mark_as_solved
+     end
+  end
+
   get '/gowanyat' , to: "ideas#gowanyat"
   get 'ideas/top' , to: "ideas#top"
   get 'gowanyat/top' , to: "ideas#top_gowanyat"
@@ -36,7 +41,9 @@ BdayaAdmin::Application.routes.draw do
   #to_be_modified
   get  '/sent_tasks' , to: "tasks#sent_tasks"
   resources :tasks do
-    post :done
+    member do
+      post :done
+    end
     post :reopen
     post :accept
     member do
