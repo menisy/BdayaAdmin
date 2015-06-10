@@ -7,7 +7,7 @@ APP_PATH = "/home/bdaya" # NO trailing slash
 
 working_directory APP_PATH
 listen "/tmp/bdaya.sock", :backlog => 64
-listen 8080, :tcp_nopush => true
+listen 1111, :tcp_nopush => true
 timeout 30
 pid APP_PATH + "/tmp/pids/unicorn.pid"
 stderr_path APP_PATH + "/log/unicorn.stderr.log"

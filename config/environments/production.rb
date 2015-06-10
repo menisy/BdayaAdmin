@@ -63,7 +63,7 @@ BdayaAdmin::Application.configure do
     :domain             => 'gmail.com', #you can also use google.com
     :authentication     => :plain,
     user_name: 'notifications.bdaya@gmail.com',
-    password: 'bd123aya987'
+    password: 'Bdaya|IT2013'
   }
 
 
